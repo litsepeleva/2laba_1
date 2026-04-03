@@ -14,8 +14,7 @@ int main() {
         cout << "3. Удалить элемент" << endl;
         cout << "4. Найти элемент" << endl;
         cout << "5. Изменить элемент" << endl;
-        cout << "6. Сохранить и выйти" << endl;
-        cout << "Ваш выбор: ";
+        cout << "6. Сохранить" << endl;
         cin >> choice;
         
         switch(choice) {
@@ -52,7 +51,7 @@ int main() {
                 
             case 6:
                 myDB.save();
-                cout << "До свидания!" << endl;
+                cout << "Сохранено" << endl;
                 break;
                 
             default:
