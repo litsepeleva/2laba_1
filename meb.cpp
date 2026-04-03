@@ -52,13 +52,11 @@ void Baza::print() {
         cout << "Список пуст" << endl;
         return;
     }
-    cout << "\n========== БАЗА ДАННЫХ ==========" << endl;
     int i = 1;
     while (con != nullptr) {
         cout << i++ << ". " << *con << endl;
         con = con->getNext();
     }
-    cout << "==================================" << endl;
 }
 void Baza::add() {
     Mebel* one = new Mebel();
@@ -71,7 +69,6 @@ void Baza::add() {
         last->setNext(one);
         last = one;
     }
-    cout << "Элемент добавлен!" << endl;
 }
 void Baza::remove(const char* name) {
     Mebel* con = first;
@@ -87,7 +84,6 @@ void Baza::remove(const char* name) {
                 last = prev;
             }
             delete con;
-            cout << "Удалено: " << name << endl;
             return;
         }
         prev = con;
@@ -98,7 +94,6 @@ void Baza::remove(const char* name) {
 void Baza::search(const char* name, int art) {
     Mebel* con = first;
     int found = 0;
-    cout << "\n========== РЕЗУЛЬТАТЫ ПОИСКА ==========" << endl;
     while (con != nullptr) {
         if (strcmp(con->getName(), name) == 0 && con->getArt() == art) {
             cout << "ТОЧНОЕ СОВПАДЕНИЕ: " << *con << endl;
@@ -113,7 +108,6 @@ void Baza::search(const char* name, int art) {
     if (!found) {
         cout << "Ничего не найдено" << endl;
     }
-    cout << "=========================================" << endl;
 }
 void Baza::edit(const char* name) {
     Mebel* con = first;
