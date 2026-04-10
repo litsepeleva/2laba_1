@@ -13,7 +13,7 @@ private:
 public:
     Mebel();
     Mebel(const char* n, const char* c, int a);
-    ~Mebel()
+    ~Mebel();
     const char* getName() const;
     const char* getColor() const;
     int getArt() const;
