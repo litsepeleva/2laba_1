@@ -1,23 +1,43 @@
 #include "meb.hpp"
+int check2() {
+    string input;
+    bool valid = false;
+    int number = 0;
+    while (!valid) {
+        cin >> input;
+        valid = true;
+        for (int i = 0; i < input.length(); i++) {
+            if (!isdigit(input[i])) {
+                valid = false;
+                cout << "Ошибка, введите число: ";
+                break;
+            }
+        }
+        if (valid) {
+            number = stoi(input);
+        }
+    }
+    return number;
+}
 Mebel::Mebel() {
-    name[0] = '\0';
-    color[0] = '\0';
+    name = "";
+    color = "";
     art = 0;
     next = nullptr;
 }
-Mebel::Mebel(const char* n, const char* c, int a) {
-    strcpy(name, n);
-    strcpy(color, c);
+Mebel::Mebel(const string& n, const string& c, int a) {
+    name = n;
+    color = c;
     art = a;
     next = nullptr;
 }
 Mebel::~Mebel() {}
-const char* Mebel::getName() const { return name; }
-const char* Mebel::getColor() const { return color; }
+string Mebel::getName() const { return name; }
+string Mebel::getColor() const { return color; }
 int Mebel::getArt() const { return art; }
 Mebel* Mebel::getNext() const { return next; }
-void Mebel::setName(const char* n) { strcpy(name, n); }
-void Mebel::setColor(const char* c) { strcpy(color, c); }
+void Mebel::setName(const string& n) { name = n; }
+void Mebel::setColor(const string& c) { color = c; }
 void Mebel::setArt(int a) { art = a; }
 void Mebel::setNext(Mebel* n) { next = n; }
 ostream& operator<<(ostream& os, const Mebel& m) {
@@ -30,13 +50,13 @@ istream& operator>>(istream& is, Mebel& m) {
     cout << "Введите цвет: ";
     is >> m.color;
     cout << "Введите артикул: ";
-    is >> m.art;
+    m.art = check2();
     return is;
 }
 Baza::Baza() {
     first = nullptr;
     last = nullptr;
-    currentFilename[0] = '\0';
+    currentFilename = "";
 }
 Baza::~Baza() {
     Mebel* current = first;
@@ -70,11 +90,11 @@ void Baza::add() {
         last = one;
     }
 }
-void Baza::remove(const char* name) {
+void Baza::remove(const string& name) {
     Mebel* con = first;
     Mebel* prev = nullptr;
     while (con != nullptr) {
-        if (strcmp(con->getName(), name) == 0) {
+        if (con->getName() == name) {
             if (prev == nullptr) {
                 first = con->getNext();
             } else {
@@ -91,15 +111,15 @@ void Baza::remove(const char* name) {
     }
     cout << name << " не найден" << endl;
 }
-void Baza::search(const char* name, int art) {
+void Baza::search(const string& name, int art) {
     Mebel* con = first;
     int found = 0;
     while (con != nullptr) {
-        if (strcmp(con->getName(), name) == 0 && con->getArt() == art) {
+        if (con->getName() == name && con->getArt() == art) {
             cout << "ТОЧНОЕ СОВПАДЕНИЕ: " << *con << endl;
             found = 1;
         }
-        else if (strcmp(con->getName(), name) == 0 || con->getArt() == art) {
+        else if (con->getName() == name || con->getArt() == art) {
             cout << "ПОХОЖЕЕ: " << *con << endl;
             found = 1;
         }
@@ -109,21 +129,20 @@ void Baza::search(const char* name, int art) {
         cout << "Ничего не найдено" << endl;
     }
 }
-void Baza::edit(const char* name) {
+void Baza::edit(const string& name) {
     Mebel* con = first;
     while (con != nullptr) {
-        if (strcmp(con->getName(), name) == 0) {
+        if (con->getName() == name) {
             cout << "\nРедактирование: " << *con << endl;
             cout << "Введите новые данные:" << endl;
-            char newName[50];
-            char newColor[50];
+            string newName, newColor;
             int newArt;
             cout << "Новый вид мебели: ";
             cin >> newName;
             cout << "Новый цвет: ";
             cin >> newColor;
             cout << "Новый артикул: ";
-            cin >> newArt;
+            newArt = check2();
             con->setName(newName);
             con->setColor(newColor);
             con->setArt(newArt);
@@ -135,8 +154,8 @@ void Baza::edit(const char* name) {
     cout << "Элемент не найден" << endl;
 }
 void Baza::save() {
-    if (currentFilename[0] == '\0') {
-        cout << "Ошибка: имя файла не задано" << endl;
+    if (currentFilename.empty()) {
+        cout << "Ошибка: не введено имя файла" << endl;
         return;
     }
     ofstream file(currentFilename);
@@ -152,14 +171,14 @@ void Baza::save() {
     file.close();
     cout << "Сохранено в файл: " << currentFilename << endl;
 }
-void Baza::load(const char* filename) {
+void Baza::load(const string& filename) {
     setFilename(filename);
     ifstream file(filename);
     if (!file) {
         cout << "Файл не найден, будет создан новый" << endl;
         return;
     }
-    char name[50], color[50];
+    string name, color;
     int art;
     while (file >> name >> color >> art) {
         Mebel* one = new Mebel(name, color, art);
@@ -175,8 +194,8 @@ void Baza::load(const char* filename) {
     file.close();
     cout << "Загружено из файла: " << filename << endl;
 }
-void Baza::setFilename(const char* filename) {
-    strcpy(currentFilename, filename);
+void Baza::setFilename(const string& filename) {
+    currentFilename = filename;
 }
 Mebel& Baza::operator[](int index) {
     Mebel* con = first;
@@ -188,7 +207,7 @@ Mebel& Baza::operator[](int index) {
         con = con->getNext();
         i++;
     }
-    throw out_of_range("Индекс вне диапазона");
+    throw out_of_range("ошибка");
 }
 ostream& operator<<(ostream& os, Baza& b) {
     b.print();
