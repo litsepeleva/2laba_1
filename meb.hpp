@@ -2,24 +2,26 @@
 #define MEB_HPP
 #include <iostream>
 #include <fstream>
-#include <cstring>
+#include <string>
+#include <cctype>
 using namespace std;
+
 class Mebel {
 private:
-    char name[50];
-    char color[50];
+    string name;
+    string color;
     int art;
     Mebel* next;
 public:
     Mebel();
-    Mebel(const char* n, const char* c, int a);
+    Mebel(const string& n, const string& c, int a);
     ~Mebel();
-    const char* getName() const;
-    const char* getColor() const;
+    string getName() const;
+    string getColor() const;
     int getArt() const;
     Mebel* getNext() const;
-    void setName(const char* n);
-    void setColor(const char* c);
+    void setName(const string& n);
+    void setColor(const string& c);
     void setArt(int a);
     void setNext(Mebel* n);
     friend ostream& operator<<(ostream& os, const Mebel& m);
@@ -29,21 +31,22 @@ class Baza {
 private:
     Mebel* first;
     Mebel* last;
-    char currentFilename[100];
+    string currentFilename;
 public:
     Baza();
     ~Baza();
     void print();
     void add();
-    void remove(const char* name);
-    void search(const char* name, int art);
-    void edit(const char* name);
+    void remove(const string& name);
+    void search(const string& name, int art);
+    void edit(const string& name);
     void save();
-    void load(const char* filename);
-    void setFilename(const char* filename);
+    void load(const string& filename);
+    void setFilename(const string& filename);
     Mebel& operator[](int index);
     friend ostream& operator<<(ostream& os, Baza& b);
     friend istream& operator>>(istream& is, Baza& b);
 };
-
+int check1();
+int check2();
 #endif
